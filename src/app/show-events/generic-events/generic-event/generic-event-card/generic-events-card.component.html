@@ -1,0 +1,33 @@
+<mat-card class="genericEvent-card">
+  <mat-card-header>
+    <mat-card-title (click)="openDetails()">{{showDate(event.info.date)}}</mat-card-title>
+    <mat-card-subtitle (click)="openDetails()"><b [innerHtml]=event.info.name></b></mat-card-subtitle>
+    <mat-card-subtitle (click)="openDetails()">{{event.info.place}} a las {{event.info.time}}</mat-card-subtitle>
+    <div (click)="openDetails()" class="genericEvent-header-participants">
+      <mat-icon class='primary-color'>info</mat-icon>
+      <p>
+        <mat-icon *ngIf="!event.info.limit || length(event.info.enrolled) < event.info.limit">
+          <img src="assets/icons/participants.png">
+        </mat-icon>
+        <mat-icon *ngIf="event.info.limit && length(event.info.enrolled) >= event.info.limit">
+          <img src="assets/icons/participants-warn.png">
+        </mat-icon>
+        {{length(event.info.enrolled)}} / {{!event.info.limit ? '&infin;' : event.info.limit}}
+      </p>
+    </div>
+  </mat-card-header>
+  <div class="event-card-img-div-80vw">
+      <img class="event-card-img-80vw" mat-card-image src={{event.info.image}} alt="Photo of the event" onerror="this.src='assets/icons/logoGames.jpg'">
+      <img *ngIf="!event.info.status" mat-card-image class="event-cancel event-card-img-80vw" src="assets/icons/cancel-gaming-event.png">
+      <img *ngIf="!event.info.status" mat-card-image class="event-cancel event-card-img-80vw" src="assets/icons/cancelado.png">
+  </div>
+  <mat-card-actions *ngIf="event.info.status">
+    <button (click)="whatsappShare()" mat-button><mat-icon><img class="max-size" src="assets/icons/whatsapp.png"></mat-icon></button>
+    <button (click)="maybe()" mat-raised-button><b>QUIZÁS</b></button>
+    <button *ngIf="!event.info.limit || length(event.info.enrolled) < event.info.limit" (click)="enroll()" mat-raised-button color="primary"><b>PARTICIPAR</b></button>
+    <button *ngIf="event.info.limit && length(event.info.enrolled) >= event.info.limit" (click)="reserve()" mat-raised-button color="warn"><b>SUPLENTE</b></button>
+  </mat-card-actions>
+  <mat-card-actions *ngIf="!event.info.status">
+    <button (click)="whatsappShare()" mat-button><mat-icon><img class="max-size" src="assets/icons/whatsapp.png"></mat-icon></button>
+  </mat-card-actions>
+</mat-card>

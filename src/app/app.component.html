@@ -1,0 +1,28 @@
+<div class="appContainer">
+  <mat-toolbar class="toolbarApp">
+    <button mat-icon-button (click)="snav.toggle()"><mat-icon>menu</mat-icon></button>
+    <h1>Buen Rollo</h1>
+  </mat-toolbar>
+  <mat-sidenav-container class="app-sidenav-container font-family">
+    <mat-sidenav class="sidenav" #snav fixedTopGap="56">
+      <mat-nav-list>
+        <div class="sidenav-menu-item">
+          <h2><b>Quedadas:</b></h2>
+          <a (click)="snav.toggle()" mat-list-item routerLink="eventos">Eventos</a>
+        </div>
+        <mat-divider></mat-divider>
+        <div class="sidenav-menu-item">
+          <h2><b>Organizar:</b></h2>
+          <a (click)="snav.toggle()" mat-list-item routerLink="crearevento/generico">Nuevo evento</a>
+        </div>
+      </mat-nav-list>
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+      <router-outlet></router-outlet>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+  <footer footer-copyright text-center py-3 class="toolbarFooter">
+      <span>© 2020 Buen rollo. <a href="mailto:jordacalcan@gmail.com">Contacto</a></span>
+  </footer>
+</div>

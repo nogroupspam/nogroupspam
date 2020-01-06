@@ -1,0 +1,9 @@
+<div class="max-size">
+  <div class ="flex-colum" *ngFor="let genericEventsDay of genericEventsDayList">
+    <h1>{{showDate(genericEventsDay.idDay)}}</h1>
+    <div class="card-list" *ngFor="let event of genericEventsDay.events">
+      <app-generic-events-thumbnail [idDay]="genericEventsDay.idDay" [event]="event"></app-generic-events-thumbnail>
+    </div>
+  </div>
+  <br>
+</div>

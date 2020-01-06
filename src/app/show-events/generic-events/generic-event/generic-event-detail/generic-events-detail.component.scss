@@ -1,0 +1,25 @@
+h1 {
+  color: #000000;
+}
+
+p {
+  text-align: justify;
+  // word-break: break-all;
+}
+
+ul {
+  padding: 0;
+}
+
+li {
+  list-style: none;
+}
+
+li > *{
+  // display: inline-block;
+  vertical-align: middle;
+}
+
+.edit-color {
+  color: #475A78;
+}

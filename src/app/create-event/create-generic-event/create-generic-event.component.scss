@@ -1,0 +1,55 @@
+:host {
+  background-color: #475A78 !important;
+}
+
+.content {
+  background-color: #475A78 !important;
+}
+
+.tittle {
+  display: flow-root;
+}
+
+h1 {
+  text-align: center;
+}
+
+.iconsForSearch {
+  display: inline-block;
+  width: 42px;
+  // height: 48px;
+  vertical-align: middle;
+}
+
+.iconsForSearchImage {
+  max-width: 40px;
+  max-height: 40px;
+  vertical-align: middle;
+}
+
+.mat-form-field {
+  width: 100%;
+}
+
+.mat-option {
+  font-size: 14px;
+}
+
+.mat-optgroup .mat-option:not(.mat-option-multiple) {
+  padding-left: 16px;
+}
+
+.select-time-color {
+  --body-background-color: #fff;
+  --primary-font-family: 'Roboto',sans-serif;
+  --button-color: #3498db;
+  --dial-active-color: #fff;
+  --dial-inactive-color: rgba(255, 255, 255, .5);
+  --dial-background-color: #475A78 !important;
+  --clock-face-time-active-color: #fff;
+  --clock-face-time-inactive-color: #6c6c6c;
+  --clock-face-inner-time-inactive-color: #929292;
+  --clock-face-time-disabled-color: #c5c5c5;
+  --clock-face-background-color: #f0f0f0;
+  --clock-hand-color: #3498db;
+}

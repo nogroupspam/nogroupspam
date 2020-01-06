@@ -1,0 +1,68 @@
+<div mat-dialog-content>
+  <div *ngIf="event.info.timeEnd || event.info.description">
+    <p *ngIf="event.info.description">{{event.info.description}}</p>
+    <p *ngIf="event.info.timeEnd">Terminará a las {{event.info.timeEnd}}.</p>
+  </div>
+  <div>
+    <h2 mat-dialog-title><b>Participantes:</b></h2>
+    <ul class="padding-lef" *ngFor="let key of enrolledKeys">
+      <li class="overflow">
+        <span>{{event.info.enrolled[key]}}</span>
+        <span class="float-right">
+          <mat-icon (click)="editEnrolled(key, event.info.enrolled[key])" class="edit-color space-right" aria-hidden="false" aria-label="edit icon">edit</mat-icon>
+          <mat-icon (click)="deleteEnrolled(key)" class="warn-color space-left" aria-hidden="false" aria-label="delete icon">delete</mat-icon>
+        </span>
+      </li>
+    </ul>
+  </div>
+  <div *ngIf="reservesKeys.length">
+    <h2 mat-dialog-title><b>Suplentes:</b></h2>
+    <ul class="padding-lef" *ngFor="let key of reservesKeys">
+      <li class="overflow">
+        <span>{{event.info.reserves[key]}}</span>
+        <span class="float-right">
+          <!--
+          <mat-icon *ngIf="promoteReserves" (click)="promoteReserve(key)" class="accent-color space-right" aria-hidden="false" aria-label="assignment_turned_in icon">assignment_turned_in</mat-icon>
+          -->
+          <mat-icon (click)="editReserves(key, event.info.reserves[key])" class="edit-color space-left space-right" aria-hidden="false" aria-label="edit icon">edit</mat-icon>
+          <mat-icon (click)="deleteReserves(key)" class="warn-color space-left" aria-hidden="false" aria-label="delete icon">delete</mat-icon>
+        </span>
+      </li>
+    </ul>
+  </div>
+  <div *ngIf="maybeKeys.length">
+      <h2 mat-dialog-title><b>Quizás asistan:</b></h2>
+      <ul class="padding-lef" *ngFor="let key of maybeKeys">
+        <li class="overflow">
+          <span>{{event.info.maybe[key]}}</span>
+          <span class="float-right">
+            <!--
+            <mat-icon (click)="promoteMaybe(key)" class="accent-color space-right" aria-hidden="false" aria-label="event_available icon">event_available</mat-icon>
+            -->
+            <mat-icon (click)="editMaybe(key, event.info.maybe[key])" class="edit-color space-left space-right" aria-hidden="false" aria-label="edit icon">edit</mat-icon>
+            <mat-icon (click)="deleteMaybe(key)" class="warn-color space-left" aria-hidden="false" aria-label="delete icon">delete</mat-icon>
+          </span>
+        </li>
+      </ul>
+    </div>
+  <!--
+  <mat-form-field>
+    <input matInput [(ngModel)]="event.info.day">
+  </mat-form-field>
+  -->
+</div>
+<!--
+<div layout="row" layout-align="between center">
+-->
+<div class="flex-space-evenly space-top">
+  <!--
+  <button mat-raised-button (click)="onNoClick()">Cancel</button>
+  -->
+  <button mat-raised-button (click)="editGenericEvent()">
+    Editar evento
+    <!--
+    <mat-icon class="edit-color" aria-hidden="false" aria-label="edit icon">edit</mat-icon>
+    -->
+  </button>
+  <button mat-raised-button color="primary" [mat-dialog-close]="event">Volver</button>
+</div>

@@ -1,0 +1,35 @@
+.genericEvent-card {
+  max-width: 80%;
+  margin: 5% auto;
+}
+
+.genericEvent-header-participants {
+  display: flex;
+  flex-direction: column;
+  margin-left: auto;
+  align-items: center;
+  // text-align: center;
+  justify-content: space-evenly;
+  padding-bottom: 4%;
+}
+
+.genericEvent-header-participants p {
+  display: flex;
+  align-items: center;
+  margin: inherit;
+  width: max-content;
+}
+
+.genericEvent-header-participants mat-icon {
+  margin-right: 5px;
+}
+
+.genericEvent-header-participants img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.mat-card-actions {
+  text-align:center;
+  margin: auto !important;
+}

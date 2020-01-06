@@ -1,0 +1,217 @@
+/* You can add global styles to this file, and also import other style files */
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
+/*
+:root {
+  --blue: #475A78;
+  --scarlet: #c50030;
+  --selected: #475A78;
+}
+
+body {
+  background-color: var(--selected)
+}
+*/
+
+.appContainer {
+  height: 100%;
+  width: 100%;
+}
+
+.font-family {
+  font-family: Roboto,"Helvetica Neue",sans-serif;
+}
+
+body {
+  // background-color: #475A78;
+  margin: 0;
+}
+
+h1 {
+  color: #ffffff;
+}
+
+.scarlet-color{
+  color: #C50030 !important;
+}
+
+.primary-color {
+  color: #3498db !important;
+}
+
+.accent-color {
+  color: #ff9800 !important;
+}
+
+.warn-color {
+  color: #f44336 !important;
+}
+
+.scarlet-background-color {
+  background-color: #C50030  !important;
+}
+
+.primary-background-color {
+  background-color: #3498db  !important;
+}
+
+.accent-background-color {
+  background-color: #ff9800  !important;
+}
+
+.warn-background-color {
+  background-color: #f44336 !important;
+}
+
+.warning-background-color {
+  background-color: #ffcc00  !important;
+}
+
+// Colors of compoments
+.mat-raised-button.mat-primary {
+  background-color: #3498db;
+}
+
+.mat-raised-button.mat-accent {
+  background-color: #ff9800 !important;
+  color: #000000 !important;
+}
+
+.mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle {
+  border-color: #ff9800;
+}
+
+.mat-radio-button.mat-accent .mat-radio-inner-circle {
+  background-color: #ff9800;
+}
+
+div.swiper-pagination {
+  z-index: 0 !important;
+  width: 100% !important;
+}
+
+span.swiper-pagination-bullet {
+  opacity: 1;
+  background: #ffffff;
+}
+
+span.swiper-pagination-bullet-active {
+  opacity: 1;
+  background: #3498db;
+  border-color: #3498db !important;
+}
+
+.mat-step-header .mat-step-icon-selected, .mat-step-header .mat-step-icon-state-done, .mat-step-header .mat-step-icon-state-edit {
+  background-color: #3498db;
+  color: #fff;
+}
+
+.mat-calendar-body-selected {
+  background-color: #3498db;
+  color: #fff;
+}
+
+// Position
+[hidden] {
+  display: none !important;
+}
+
+.event-card-img-div-80vw {
+  display: flex;
+  width: 80vw;
+  height: 80vw;
+  margin: auto!important;
+}
+
+.event-card-img-80vw {
+  max-width: 80vw;
+  max-height: 80vw;
+  height: auto !important;
+  width: auto !important;
+  margin: auto !important;
+  align-self: center;
+}
+
+.event-cancel {
+  position: absolute !important;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+
+.radio-group-colum {
+  display: flex;
+  flex-direction: column;
+  margin: 15px 0;
+}
+
+.flex-start {
+  display: flex;
+  align-self: flex-start;
+}
+
+.flex-colum {
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-space-evenly {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.max-size {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.max-size-center {
+  max-width: 100%;
+  max-height: 100%;
+  margin: auto !important;
+}
+
+.center-text {
+  text-align:center;
+}
+
+.float-right {
+  float: right;
+}
+
+.padding-left {
+  padding: 0;
+}
+
+.vertical-middle {
+  vertical-align: middle;
+}
+
+.margin-5 {
+  margin: 5px;
+}
+
+button.margin-5 {
+  margin: 5px;
+}
+
+.space-left {
+  margin-left: 10px;
+}
+
+.space-right {
+  margin-right: 10px;
+}
+
+.space-top {
+  margin-top: 10px;
+}
+
+.space-top-5 {
+  margin-top: 5px;
+}
+
+.overflow {
+  overflow: auto;
+}

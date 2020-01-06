@@ -1,0 +1,30 @@
+<div mat-dialog-content>
+  <!--
+  <form class="flex-colum" [formGroup]="participantsFormGroup">
+  -->
+  <form>
+    <mat-form-field>
+      <mat-chip-list #chipListParticipants>
+        <mat-chip *ngFor="let participant of enrolled" [selectable]="selectable"
+                  [removable]="removable" (removed)="removeParticipant(participant)">
+          {{participant}}
+          <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+        </mat-chip>
+        <input placeholder="Inscribir participantes..."
+              [matChipInputFor]="chipListParticipants"
+              [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+              [matChipInputAddOnBlur]="addOnBlur"
+              (matChipInputTokenEnd)="addParticipant($event)">
+      </mat-chip-list>
+      <mat-hint *ngIf="!errorsInLimit" align="start">Pulsa enter para añadir.</mat-hint>
+      <mat-hint class="warn-color" *ngIf="errorsInLimit" align="start">ERROR: Límite de {{limit}} participantes alcanzado.</mat-hint>
+    </mat-form-field>
+  </form>
+</div>
+<!--
+<div layout="row" layout-align="between center">
+-->
+<div class="flex-space-evenly space-top">
+  <button mat-raised-button (click)="onNoClick()">Cancelar</button>
+  <button mat-raised-button (click)="onSave()" color="primary">Guardar</button>
+</div>
