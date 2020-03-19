@@ -1,6 +1,6 @@
 <div class="content">
   <div class="tittle">
-    <h1>{{!editEvent ? 'Crear' : 'Editar'}} evento</h1>
+    <h2>{{!editEvent ? 'Crear' : 'Editar'}} mensaje de grupo</h2>
   </div>
 
   <mat-vertical-stepper [linear]="isLinear" #stepper>
@@ -8,54 +8,17 @@
     <mat-step *ngIf="editEvent">
       <ng-template matStepLabel>Selecciona una opción:</ng-template>
       <div>
-        <button *ngIf="editingGenericEvent.info.status" class="margin-5" mat-raised-button color="warn" (click)="statusEvent(false)">Cancelar Evento</button>
-        <button *ngIf="!editingGenericEvent.info.status" class="margin-5" mat-raised-button color="warn" (click)="statusEvent(true)">Reactivar Evento</button>
-        <button class="margin-5" mat-raised-button color="primary" (click)="editingEventStart(stepper)">Editar Evento</button>
+        <button *ngIf="editingGenericEvent.info.status" class="margin-5" mat-raised-button color="warn" (click)="statusEvent(false)">Cancelar mensaje de grupo</button>
+        <button *ngIf="!editingGenericEvent.info.status" class="margin-5" mat-raised-button color="warn" (click)="statusEvent(true)">Reactivar mensaje de grupo</button>
+        <button class="margin-5" mat-raised-button color="primary" (click)="editingEventStart(stepper)">Editar mensaje de grupo</button>
       </div>
-    </mat-step>
-    <!-- Select date -->
-    <mat-step *ngIf="!editEvent || editingEvent" [stepControl]="selectDateFormGroup">
-      <form [formGroup]="selectDateFormGroup">
-        <ng-template matStepLabel>Fecha</ng-template>
-        <mat-form-field>
-          <input matInput [matDatepicker]="picker" [min]="minDate" (click)="picker.open()" placeholder="Seleccione una fecha" formControlName="date" required readonly>
-          <mat-icon matSuffix (click)="picker.open()">calendar_today</mat-icon>
-          <mat-datepicker touchUi #picker disabled="false"></mat-datepicker>
-        </mat-form-field>
-        <ng-template #cancelBtn>
-          <button class="margin-5" mat-raised-button>Cancelar</button>
-        </ng-template>
-        <ng-template #confirmBtn>
-            <button class="margin-5" mat-raised-button color="primary">Aceptar</button>
-        </ng-template>
-        <mat-form-field>
-            <input color="primary" matInput placeholder="Hora de inicio" aria-label="Seleccione una hora de inicio" [ngxTimepicker]="fullTime" [format]="24" formControlName="time" required readonly>
-            <mat-icon matSuffix (click)="fullTime.open()">access_time</mat-icon>
-            <ngx-material-timepicker id="select-time-color" class="select-time-color" #fullTime
-              [cancelBtnTmpl]="cancelBtn"
-              [confirmBtnTmpl]="confirmBtn">
-            </ngx-material-timepicker>
-        </mat-form-field>
-        <mat-form-field>
-            <input matInput placeholder="Hora de finalización" aria-label="Seleccione una hora de finalización" [ngxTimepicker]="fullTimeEnd" [format]="24" formControlName="timeEnd" readonly>
-            <mat-icon matSuffix (click)="fullTimeEnd.open()">access_time</mat-icon>
-            <ngx-material-timepicker class="select-time-color" #fullTimeEnd
-              [cancelBtnTmpl]="cancelBtn"
-              [confirmBtnTmpl]="confirmBtn">
-            </ngx-material-timepicker>
-        </mat-form-field>
-        <div>
-          <button *ngIf="!editEvent" class="margin-5" mat-raised-button color="primary" matStepperNext>Siguiente</button>
-          <button *ngIf="editEvent" class="margin-5" mat-raised-button color="primary" (click)="advance2steps(stepper)">Siguiente</button>
-        </div>
-      </form>
     </mat-step>
     <!-- Information -->
     <mat-step *ngIf="!editEvent || editingEvent" [stepControl]="informationFormGroup">
       <form [formGroup]="informationFormGroup">
         <ng-template matStepLabel>Información</ng-template>
         <mat-form-field>
-          <textarea type="text" matInput #eventName placeholder="Nombre del evento" formControlName="eventName" required
+          <textarea type="text" matInput #eventName placeholder="Nombre del mensaje" formControlName="eventName" required
           cdkTextareaAutosize
           #autosize="cdkTextareaAutosize"
           cdkAutosizeMinRows="1"
@@ -63,77 +26,13 @@
         </textarea>
         </mat-form-field>
         <mat-form-field>
-          <input type="text" matInput placeholder="Lugar" formControlName="place" required [matAutocomplete]="autoPlaces">
-          <mat-autocomplete #autoPlaces="matAutocomplete">
-            <mat-option (click)="selectPlace(optionPlace)" *ngFor="let optionPlace of filteredPlaces | async" [value]="optionPlace.name">
-              {{optionPlace.name}}
-            </mat-option>
-          </mat-autocomplete>
-        </mat-form-field>
-        <mat-form-field>
-          <input type="number" matInput placeholder="Limite de participantes" (keydown)="checkNumber($event)" formControlName="limit">
-        </mat-form-field>
-        <mat-form-field>
-          <textarea type="text" matInput #description placeholder="Descripción" formControlName="description"
-            maxlength="240"
+          <textarea type="text" matInput #message placeholder="Mensaje" formControlName="message"
             cdkTextareaAutosize
+            required
             #autosize="cdkTextareaAutosize"
             cdkAutosizeMinRows="1"
-            cdkAutosizeMaxRows="10">
+            cdkAutosizeMaxRows="30">
           </textarea>
-          <mat-hint align="start">Máximo 240 caracteres</mat-hint>
-          <mat-hint align="end">{{description.value.length}} / 240</mat-hint>
-        </mat-form-field>
-        <div>
-          <button class="margin-5" mat-raised-button matStepperPrevious>Atrás</button>
-          <button class="margin-5" mat-raised-button color="primary" matStepperNext>Siguiente</button>
-        </div>
-      </form>
-    </mat-step>
-    <!-- Image -->
-    <mat-step *ngIf="!editEvent || editingEvent" [stepControl]="imageFormGroup">
-      <form class="flex-colum" [formGroup]="imageFormGroup">
-        <ng-template matStepLabel>Imagen</ng-template>
-          Selecciona una imagen:
-          <mat-radio-group class="radio-group-colum" aria-label="Selecciona una opción" formControlName="imageType">
-            <mat-radio-button color="accent" class="margin-5" *ngIf="editEvent" value="before">Anterior</mat-radio-button>
-            <mat-radio-button color="accent" class="margin-5" *ngIf="selectedPlace && selectedPlace.image" value="place">Lugar</mat-radio-button>
-            <mat-radio-button color="accent" class="margin-5" value="logo">Buen Rollo</mat-radio-button>
-            <mat-radio-button color="accent" class="margin-5" value="edit">Personalizar</mat-radio-button>
-          </mat-radio-group>
-        <mat-form-field [hidden]="imageUrlHidden">
-          <input type="url" matInput placeholder="url" formControlName="imageUrl">
-        </mat-form-field>
-        <div>
-          <button class="margin-5" mat-raised-button matStepperPrevious>Atrás</button>
-          <button class="margin-5" mat-raised-button color="primary" matStepperNext>Siguiente</button>
-        </div>
-        Previsualización:
-        <img class="flex-start margin-5 max-size" [src]="selectedImage" onerror="this.src='assets/icons/noImage.jpg'">
-      </form>
-    </mat-step>
-    <!-- Participants -->
-    <mat-step *ngIf="!editEvent" [stepControl]="participantsFormGroup">
-      <form class="flex-colum" [formGroup]="participantsFormGroup">
-        <ng-template matStepLabel>Participantes</ng-template>
-        <mat-form-field>
-          <input type="text" matInput placeholder="Tu nombre" formControlName="organizer">
-        </mat-form-field>
-        <mat-form-field>
-          <mat-chip-list #chipListParticipants>
-            <mat-chip *ngFor="let participant of enrolled" [selectable]="selectable"
-                      [removable]="removable" (removed)="removeParticipant(participant)">
-              {{participant}}
-              <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
-            </mat-chip>
-            <input placeholder="Inscribir participantes..."
-                  [matChipInputFor]="chipListParticipants"
-                  [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                  [matChipInputAddOnBlur]="addOnBlur"
-                  (matChipInputTokenEnd)="addParticipant($event)">
-          </mat-chip-list>
-          <mat-hint *ngIf="!errorsInLimit" align="start">Pulsa enter para añadir.</mat-hint>
-          <mat-hint class="warn-color" *ngIf="errorsInLimit" align="start">ERROR: Límite de {{limit}} participantes alcanzado.</mat-hint>
         </mat-form-field>
         <div>
           <button class="margin-5" mat-raised-button matStepperPrevious>Atrás</button>
@@ -144,13 +43,13 @@
     <mat-step *ngIf="!editEvent">
       <ng-template matStepLabel>Enviar</ng-template>
       <div>
-        <button class="margin-5" mat-raised-button color="accent" (click)=createEvent()>Crear Evento</button>
+        <button class="margin-5" mat-raised-button color="accent" (click)=createEvent()>Crear mensaje de grupo</button>
       </div>
     </mat-step>
     <mat-step *ngIf="editEvent && editingEvent">
         <ng-template matStepLabel>Enviar</ng-template>
         <div>
-          <button class="margin-5" mat-raised-button color="accent" (click)=updateEvent()>Modificar Evento</button>
+          <button class="margin-5" mat-raised-button color="accent" (click)=updateEvent()>Modificar mensaje de grupo</button>
         </div>
       </mat-step>
   </mat-vertical-stepper>

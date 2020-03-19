@@ -1,27 +1,30 @@
-import { Observable, Subscriber } from 'rxjs';
-import { Injectable } from '@angular/core';
+import { Observable, Subscriber } from "rxjs";
+import { Injectable } from "@angular/core";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root"
 })
 export class UtilsObservables {
-  public addIdToNext(obervable: Observable<any>, id: number) {
+  public addIdToNext(obervable: Observable<any>, id: string) {
     return new Observable(subscriber => {
       obervable.subscribe({
-        next: (info) => {
+        next: info => {
           subscriber.next({
             id,
             info
           });
         },
-        error: (err) => {
+        error: err => {
           subscriber.error(err);
         }
       });
     });
   }
 
-  public dispatchResponse(comunication: Observable<any>, subscriber: Subscriber<any>) {
+  public dispatchResponse(
+    comunication: Observable<any>,
+    subscriber: Subscriber<any>
+  ) {
     comunication.subscribe({
       next: (x: any) => {
         subscriber.next(x);
@@ -42,9 +45,15 @@ export class UtilsObservables {
    * @param errors Number of errors in subscriber.
    * @param errorMessage Error message that will launch if there are errors.
    */
-  public checkIfSubscriberIsFinished(subscriber: Subscriber<any>, count: number, finish: number, errors: number, errorMessage: string) {
+  public checkIfSubscriberIsFinished(
+    subscriber: Subscriber<any>,
+    count: number,
+    finish: number,
+    errors: number,
+    errorMessage: string
+  ) {
     if (count === finish) {
-      if ( errors === 0 ) {
+      if (errors === 0) {
         subscriber.next(true);
         subscriber.complete();
       } else {

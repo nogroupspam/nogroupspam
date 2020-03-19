@@ -1,24 +1,24 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { Router } from '@angular/router';
-import { LocalDate } from '../../../../shared/localdate/model/localdate';
-import { DateUtils } from '../../../../shared/localdate/date-utils';
-import { STATE } from '../../../../app-state';
-import { GenericEvent } from '../../../../shared/models/events/event/generic/genericEvent';
+import { Component, OnInit, Input } from "@angular/core";
+import { Router } from "@angular/router";
+import { LocalDate } from "../../../../shared/localdate/model/localdate";
+import { DateUtils } from "../../../../shared/localdate/date-utils";
+import { STATE } from "../../../../app-state";
+import { Event } from "../../../../shared/models/events/event/event";
 
 @Component({
-  selector: 'app-generic-events-thumbnail',
-  templateUrl: './generic-events-thumbnail.component.html',
-  styleUrls: ['./generic-events-thumbnail.component.scss']
+  selector: "app-generic-events-thumbnail",
+  templateUrl: "./generic-events-thumbnail.component.html",
+  styleUrls: ["./generic-events-thumbnail.component.scss"]
 })
 export class GenericEventsThumbnailComponent implements OnInit {
   @Input()
   idDay: string;
   @Input()
-  event: GenericEvent;
+  event: Event;
 
-  constructor(private router: Router) { }
+  constructor(private router: Router) {}
 
-  ngOnInit() { }
+  ngOnInit() {}
 
   length(object: object): number {
     if (object) {
@@ -37,6 +37,6 @@ export class GenericEventsThumbnailComponent implements OnInit {
       idDay: this.idDay,
       event: this.event
     });
-    this.router.navigate(['eventos/' + this.idDay + '/' + this.event.id]);
+    this.router.navigate(["eventos/" + this.idDay + "/" + this.event.id]);
   }
 }

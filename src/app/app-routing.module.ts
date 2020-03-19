@@ -9,12 +9,15 @@ const externalUrlProvider = new InjectionToken('externalUrlRedirectResolver');
 */
 
 const routes: Routes = [
-  { path: "", redirectTo: "crearevento/generico", pathMatch: "full" },
-  { path: "index", redirectTo: "crearevento/generico", pathMatch: "full" },
-  { path: "eventos", component: GenericEventsComponent },
-  { path: "eventos/:idDay/:id", component: GenericEventComponent },
-  { path: "crearevento/generico", component: CreateGenericEventComponent },
-  { path: "editarevento/generico/:event", component: CreateGenericEventComponent }
+  { path: "", redirectTo: "crearmensaje", pathMatch: "full" },
+  { path: "index", redirectTo: "crearmensaje", pathMatch: "full" },
+  { path: "mensajes", component: GenericEventsComponent },
+  { path: "mensajes/:id", component: GenericEventComponent },
+  { path: "crearmensaje", component: CreateGenericEventComponent },
+  {
+    path: "editarmensaje/generico/:event",
+    component: CreateGenericEventComponent
+  }
   /*
   { path: 'externalRedirect',
     resolve: {

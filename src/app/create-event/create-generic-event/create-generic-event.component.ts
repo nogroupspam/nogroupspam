@@ -12,10 +12,7 @@ import { Icons } from "../../shared/models/icons";
 import { DateUtils } from "../../shared/localdate/date-utils";
 import { LocalDate } from "../../shared/localdate/model/localdate";
 import { Dialogs } from "../../shared/dialogs/dialogs";
-import {
-  GenericEvent,
-  GenericEventInfo
-} from "../../shared/models/events/event/generic/genericEvent";
+import { Event, EventInfo } from "../../shared/models/events/event/event";
 
 @Component({
   selector: "app-create-generic-event",
@@ -24,39 +21,13 @@ import {
 })
 export class CreateGenericEventComponent implements OnInit {
   // Edit event
-  editingGenericEvent: GenericEvent;
+  editingGenericEvent: Event;
   editEvent = false;
   editingEvent = false;
 
   // Form Groups
   isLinear = true;
-  selectDateFormGroup: FormGroup;
-  searchGameFormGroup: FormGroup;
   informationFormGroup: FormGroup;
-  imageFormGroup: FormGroup;
-  participantsFormGroup: FormGroup;
-
-  // Date
-  minDate = new Date();
-
-  // Places
-  places: Place[] = Places.getAllPlaces();
-  filteredPlaces: Observable<Place[]>;
-  selectedPlace: Place = {} as Place;
-
-  // Image
-  selectedImage = "";
-  selectedImageThumbnail = "";
-  imageUrlHidden = false;
-
-  // Participants
-  readonly separatorKeysCodes: number[] = [ENTER, COMMA];
-  enrolled: string[] = [];
-  limit = 0;
-  errorsInLimit = false;
-  selectable = true;
-  removable = true;
-  addOnBlur = true;
 
   constructor(
     private router: Router,
@@ -67,96 +38,10 @@ export class CreateGenericEventComponent implements OnInit {
 
   ngOnInit() {
     // FormGoups
-    this.selectDateFormGroup = this.formGameBuilder.group({
-      date: ["", Validators.required],
-      time: ["", Validators.required],
-      timeEnd: [""]
-    });
-    this.searchGameFormGroup = this.formGameBuilder.group({
-      searchName: [""]
-    });
     this.informationFormGroup = this.formGameBuilder.group({
       eventName: ["", Validators.required],
-      place: ["", Validators.required],
-      limit: [""],
-      description: [""]
+      message: ["", Validators.required]
     });
-    this.imageFormGroup = this.formGameBuilder.group({
-      imageType: [""],
-      imageUrl: [""],
-      imageUrlThumbnail: [""]
-    });
-    this.participantsFormGroup = this.formGameBuilder.group({
-      organizer: ["", Validators.required]
-    });
-
-    this.filteredPlaces = this.informationFormGroup
-      .get("place")
-      .valueChanges.pipe(
-        startWith(""),
-        map(value => this.placesFilter(value))
-      );
-
-    this.informationFormGroup.get("limit").valueChanges.subscribe(result => {
-      if (result === null || result === "") {
-        this.limit = 0;
-      } else {
-        if (result < 0) {
-          result = 0;
-          this.informationFormGroup.get("limit").setValue(0);
-        }
-        this.limit = result;
-      }
-    });
-
-    this.imageFormGroup.get("imageUrl").valueChanges.subscribe(result => {
-      this.selectedImage = result;
-    });
-
-    this.imageFormGroup
-      .get("imageUrlThumbnail")
-      .valueChanges.subscribe(result => {
-        this.selectedImageThumbnail = result;
-      });
-
-    this.imageFormGroup.get("imageType").valueChanges.subscribe(result => {
-      switch (result) {
-        case "edit":
-          this.imageFormGroup.get("imageUrl").enable();
-          this.imageFormGroup.get("imageUrl").setValue("");
-          this.imageFormGroup.get("imageUrlThumbnail").setValue("");
-          this.imageUrlHidden = false;
-          break;
-        case "logo":
-          this.imageFormGroup.get("imageUrl").disable();
-          this.imageFormGroup.get("imageUrl").setValue(Icons.logoGames);
-          this.imageFormGroup
-            .get("imageUrlThumbnail")
-            .setValue(Icons.logoGamesThumbnail);
-          this.imageUrlHidden = true;
-          break;
-        case "place":
-          this.imageFormGroup.get("imageUrl").disable();
-          this.imageFormGroup
-            .get("imageUrl")
-            .setValue(this.selectedPlace.image);
-          this.imageFormGroup
-            .get("imageUrlThumbnail")
-            .setValue(this.selectedPlace.thumbnail);
-          this.imageUrlHidden = true;
-          break;
-        case "before":
-          this.imageFormGroup.get("imageUrl").disable();
-          this.imageFormGroup
-            .get("imageUrl")
-            .setValue(this.editingGenericEvent.info.image);
-          this.imageFormGroup
-            .get("imageUrlThumbnail")
-            .setValue(this.editingGenericEvent.info.thumbnail);
-          this.imageUrlHidden = true;
-      }
-    });
-    this.imageFormGroup.get("imageType").setValue("logo");
 
     /** *
      * Map data for edit event.
@@ -169,34 +54,12 @@ export class CreateGenericEventComponent implements OnInit {
     if (this.editingGenericEvent) {
       this.editEvent = true;
       console.log(this.editingGenericEvent);
-      const date: Date = new DateUtils().convertLocalDate(
-        this.editingGenericEvent.info.date
-      );
-      this.selectDateFormGroup.get("date").setValue(date);
-      this.selectDateFormGroup
-        .get("time")
-        .setValue(this.editingGenericEvent.info.time);
-      this.selectDateFormGroup
-        .get("timeEnd")
-        .setValue(this.editingGenericEvent.info.timeEnd);
+      this.informationFormGroup
+        .get("message")
+        .setValue(this.editingGenericEvent.info.message);
       this.informationFormGroup
         .get("eventName")
         .setValue(this.editingGenericEvent.info.name);
-      this.informationFormGroup
-        .get("place")
-        .setValue(this.editingGenericEvent.info.place);
-      this.places.forEach((place: Place) => {
-        if (place.name === this.editingGenericEvent.info.place) {
-          this.selectPlace(place);
-        }
-      });
-      this.informationFormGroup
-        .get("limit")
-        .setValue(this.editingGenericEvent.info.limit);
-      this.informationFormGroup
-        .get("description")
-        .setValue(this.editingGenericEvent.info.description);
-      this.imageFormGroup.get("imageType").setValue("before");
     } else {
       console.log("No hago nada, no estoy editando.");
     }
@@ -246,109 +109,36 @@ export class CreateGenericEventComponent implements OnInit {
     stepper.next();
   }
 
-  private placesFilter(value: string): Place[] {
-    const filterValue = value.toLowerCase();
-
-    return this.places.filter(option =>
-      option.name.toLowerCase().includes(filterValue)
-    );
-  }
-
-  selectPlace(place: Place) {
-    this.selectedPlace = place;
-    // console.log('SELECTING PLACE');
-    // console.log(this.selectedGame);
-    if (place && place.image !== "undefined") {
-      // console.log('ENTRO EN CAMBIAR VALORES');
-      this.imageFormGroup.get("imageUrl").setValue(place.image);
-      this.imageFormGroup.get("imageType").setValue("place");
-    }
-  }
-
-  addParticipant(event: MatChipInputEvent): void {
-    const input = event.input;
-    const value = event.value;
-
-    if (this.limit) {
-      if (this.limit > 0 && this.enrolled.length < this.limit - 1) {
-        // Add our participant
-        if ((value || "").trim()) {
-          this.enrolled.push(value.trim());
-        }
-      } else {
-        this.errorsInLimit = true;
-      }
-    } else {
-      // Add our participant
-      if ((value || "").trim()) {
-        this.enrolled.push(value.trim());
-      }
-    }
-
-    // Reset the input value
-    if (input) {
-      input.value = "";
-    }
-  }
-
-  removeParticipant(participant: string): void {
-    const index = this.enrolled.indexOf(participant);
-
-    if (index >= 0) {
-      this.enrolled.splice(index, 1);
-    }
-    this.errorsInLimit = false;
-  }
-
   createEvent() {
-    // const dateUtils: DateUtils = new DateUtils();
-    const date: LocalDate = new DateUtils().convertStringDate(
-      this.selectDateFormGroup.get("date").value
-    );
-    if (this.saveCheckLimits) {
-      const participants: { [id: string]: string } = {};
-      participants["--organizer"] = this.participantsFormGroup.get(
-        "organizer"
-      ).value;
-      let i = 1;
-      this.enrolled.forEach(participant => {
-        participants["--p" + i] = participant;
-        i++;
-      });
-      if (this.selectedImageThumbnail === "") {
-        this.selectedImageThumbnail = this.imageFormGroup.get("imageUrl").value;
+    const eventInfo: EventInfo = {
+      name: this.informationFormGroup.get("eventName").value,
+      message: this.informationFormGroup.get("message").value,
+      status: true
+    };
+    const id = this.generateIdFromName(eventInfo.name);
+    const event: Event = {
+      id: id,
+      info: eventInfo
+    };
+    this.firebaseApi.events.generic.add.event(event).subscribe({
+      next: x => {
+        this.router.navigate(["mensajes/" + x.id]);
+      },
+      error: err => {
+        Dialogs.showError("La conexión con la base de datos ha fallado.", "");
       }
-      const event: GenericEventInfo = {
-        date,
-        time: this.selectDateFormGroup.get("time").value,
-        timeEnd: this.selectDateFormGroup.get("timeEnd").value,
-        name: this.informationFormGroup.get("eventName").value,
-        image: this.selectedImage,
-        thumbnail: this.selectedImageThumbnail,
-        place: this.informationFormGroup.get("place").value,
-        limit: this.limit,
-        enrolled: participants,
-        reserves: {},
-        maybe: {},
-        description: this.informationFormGroup.get("description").value,
-        status: true
-      };
-      this.firebaseApi.events.generic.add.event(event).subscribe({
-        next: x => {
-          this.router.navigate(["eventos/" + x.id + "/" + x.info.name]);
-        },
-        error: err => {
-          Dialogs.showError("La conexión con la base de datos ha fallado.", "");
-        }
-      });
-    } else {
-      Dialogs.showError("Limite incorrecto.", "");
-    }
+    });
+  }
+
+  generateIdFromName(name: string): string {
+    name = name.replace(/[^a-zA-Z]/g, "");
+    const id = name + Math.floor(Math.random() * (9999 - 10 + 1) + 10);
+    return id.toLowerCase();
   }
 
   public statusEvent(status: boolean) {
     this.firebaseApi.events.generic.update
-      .status(status, this.editingGenericEvent.info.date, this.editingGenericEvent.id)
+      .status(status, this.editingGenericEvent.id)
       .subscribe({
         next: (x: any) => {
           this.router.navigate([
@@ -362,26 +152,13 @@ export class CreateGenericEventComponent implements OnInit {
   }
 
   public updateEvent() {
-    const date: LocalDate = new DateUtils().convertStringDate(
-      this.selectDateFormGroup.get("date").value
-    );
-    if (this.selectedImageThumbnail === "") {
-      this.selectedImageThumbnail = this.imageFormGroup.get("imageUrl").value;
-    }
-    const event: GenericEventInfo = {
-      date,
-      time: this.selectDateFormGroup.get("time").value,
-      timeEnd: this.selectDateFormGroup.get("timeEnd").value,
+    const event: EventInfo = {
       name: this.informationFormGroup.get("eventName").value,
-      image: this.selectedImage,
-      thumbnail: this.selectedImageThumbnail,
-      place: this.informationFormGroup.get("place").value,
-      limit: this.limit,
-      description: this.informationFormGroup.get("description").value,
+      message: this.informationFormGroup.get("message").value,
       status: true
     };
     this.firebaseApi.events.generic.update
-      .event(this.editingGenericEvent.id, event, this.editingGenericEvent.info.date)
+      .event(this.editingGenericEvent.id, event.message)
       .subscribe({
         next: (x: any) => {
           this.router.navigate([
@@ -401,19 +178,5 @@ export class CreateGenericEventComponent implements OnInit {
         stepper.next();
       }
     });
-  }
-
-  private saveCheckLimits() {
-    let checked = false;
-    if (this.limit) {
-      if (this.limit > 0 && this.enrolled.length < this.limit - 1) {
-        checked = true;
-      } else {
-        this.errorsInLimit = true;
-      }
-    } else {
-      checked = true;
-    }
-    return checked;
   }
 }
