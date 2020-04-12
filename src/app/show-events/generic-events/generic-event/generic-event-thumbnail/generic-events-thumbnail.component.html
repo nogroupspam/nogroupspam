@@ -1,37 +1,6 @@
 <mat-card class="thumbnail-card" (click)="openDetails()">
   <mat-card-header>
     <div mat-card-avatar class="header-logo">
-      <img
-        class="header-logo-image"
-        src="{{ event.info.thumbnail }}"
-        onerror="this.src='assets/icons/logoGames-thumbnail.jpg'"
-      />
-    </div>
-    <mat-card-title class="header-tittle"
-      ><b [innerHtml]="event.info.name"></b
-    ></mat-card-title>
-    <mat-card-subtitle class="header-subtittle"
-      >{{ event.info.place }} a las {{ event.info.time }}</mat-card-subtitle
-    >
-    <div class="header-participants">
-      <mat-icon
-        *ngIf="
-          !event.info.limit || length(event.info.enrolled) < event.info.limit
-        "
-      >
-        <img src="assets/icons/participants.png" />
-      </mat-icon>
-      <mat-icon
-        *ngIf="
-          event.info.limit && length(event.info.enrolled) >= event.info.limit
-        "
-      >
-        <img src="assets/icons/participants-warn.png" />
-      </mat-icon>
-      <p>
-        {{ length(event.info.enrolled) }} /
-        {{ !event.info.limit ? "&infin;" : event.info.limit }}
-      </p>
     </div>
     <div class="header-participants-cancel">
       <img src="assets/icons/cancelado-thumbnail.png" />
