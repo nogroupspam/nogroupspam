@@ -132,17 +132,19 @@ export class GenericEventsCardComponent implements OnInit {
     // https://api.whatsapp.com/send?l=es&phone=34696511967&text=Hola%20quiero%20info
     // https://api.whatsapp.com/send?l=es&text=Hola%20quiero%20info
 
-    const appGenericUrl = environment.appUrlBase + "%23/eventos/";
+    const appGenericUrl = environment.appUrlBase + "%23/mensajes/";
 
     const whatsappUrl = "https://api.whatsapp.com/send?l=es&text=";
     const endline = "%0a";
-    const sharedLink = appGenericUrl + this.idDay + "/" + this.event.id;
+    const sharedLink = appGenericUrl + this.event.id;
     const texto =
       "*" +
       this.event.info.name +
       "*" +
       endline +
-      this.event.info.message +
+      endline +
+      "Accede para ver y editar el mensaje!" +
+      endline +
       endline +
       sharedLink;
 
