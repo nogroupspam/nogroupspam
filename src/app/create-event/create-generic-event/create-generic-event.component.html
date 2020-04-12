@@ -4,15 +4,6 @@
   </div>
 
   <mat-vertical-stepper [linear]="isLinear" #stepper>
-    <!-- edit event -->
-    <mat-step *ngIf="editEvent">
-      <ng-template matStepLabel>Selecciona una opción:</ng-template>
-      <div>
-        <button *ngIf="editingGenericEvent.info.status" class="margin-5" mat-raised-button color="warn" (click)="statusEvent(false)">Cancelar mensaje de grupo</button>
-        <button *ngIf="!editingGenericEvent.info.status" class="margin-5" mat-raised-button color="warn" (click)="statusEvent(true)">Reactivar mensaje de grupo</button>
-        <button class="margin-5" mat-raised-button color="primary" (click)="editingEventStart(stepper)">Editar mensaje de grupo</button>
-      </div>
-    </mat-step>
     <!-- Information -->
     <mat-step *ngIf="!editEvent || editingEvent" [stepControl]="informationFormGroup">
       <form [formGroup]="informationFormGroup">
@@ -46,11 +37,5 @@
         <button class="margin-5" mat-raised-button color="accent" (click)=createEvent()>Crear mensaje de grupo</button>
       </div>
     </mat-step>
-    <mat-step *ngIf="editEvent && editingEvent">
-        <ng-template matStepLabel>Enviar</ng-template>
-        <div>
-          <button class="margin-5" mat-raised-button color="accent" (click)=updateEvent()>Modificar mensaje de grupo</button>
-        </div>
-      </mat-step>
   </mat-vertical-stepper>
 </div>

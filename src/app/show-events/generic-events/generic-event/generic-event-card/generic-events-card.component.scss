@@ -22,7 +22,7 @@
   width: max-content;
 }
 
-.genericEvent-header-participants mat-icon {
+.genericEvent-header-participants {
   margin-right: 5px;
 }
 
@@ -34,4 +34,8 @@
 .mat-card-actions {
   text-align: center;
   margin: auto !important;
+}
+
+.mat-progress-spinner {
+  float:right;
 }

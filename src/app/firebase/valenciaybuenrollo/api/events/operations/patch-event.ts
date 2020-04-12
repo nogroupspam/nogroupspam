@@ -14,9 +14,11 @@ export class PatchEventApiRest extends FireBaseRTDBPatchApiRest {
 
   public event<Info extends EventInfo>(
     id: string,
-    message: string
+    message: string,
+    type: string
   ): Observable<any> {
-    return this.patch(`{"message": "${message}"}`, id);
+    let messageJSON = JSON.stringify(message);
+    return this.patch(`{"${type}": ${messageJSON}}`, id);
   }
 
   public status(status: boolean, id: string): Observable<any> {

@@ -15,7 +15,7 @@ export interface Event {
 /**
  * @param {string} name Name of the event.
  * @param {string} message: Message of the event.
- * @param {boolean} status if is actived or canceled.
+ * @param {string} uid user id last modification
  *
  * @export
  * @interface EventInfo
@@ -23,5 +23,5 @@ export interface Event {
 export interface EventInfo {
   name: string;
   message: string;
-  status: boolean;
+  uid: string;
 }

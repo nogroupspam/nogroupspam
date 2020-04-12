@@ -22,9 +22,9 @@ export class UpdateBOEvents {
   }
 
   // public event(id: string, event: GamingEventInfo, oldDate: LocalDate) {
-  public event(id: string, message: string) {
+  public event(id: string, message: string, type: string) {
     return new Observable(subscriber => {
-      this.patch.event(id, message).subscribe({
+      this.patch.event(id, message, type).subscribe({
         next: info => {
           subscriber.next({
             id,

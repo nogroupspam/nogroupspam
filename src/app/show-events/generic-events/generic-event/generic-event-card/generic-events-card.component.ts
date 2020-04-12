@@ -2,12 +2,16 @@ import { Component, OnInit, Input } from "@angular/core";
 import { GenericEventsDetailComponent } from "../generic-event-detail/generic-events-detail.component";
 import { MatDialog } from "@angular/material/dialog";
 import { FirebaseBOService } from "../../../../firebase/valenciaybuenrollo/shared/firebase-bo.service";
-import { Observable } from "rxjs";
+import { ViewChild, ElementRef } from "@angular/core";
 import { LocalDate } from "../../../../shared/localdate/model/localdate";
 import { DateUtils } from "../../../../shared/localdate/date-utils";
 import { environment } from "../../../../../environments/environment";
 import { Dialogs } from "../../../../shared/dialogs/dialogs";
 import { Event } from "../../../../shared/models/events/event/event";
+
+import * as Firebase from "firebase/app";
+import "firebase/database";
+import "firebase/auth";
 
 @Component({
   selector: "app-generic-events-card",
@@ -20,12 +24,41 @@ export class GenericEventsCardComponent implements OnInit {
   @Input()
   event: Event;
 
+  isRetrievingData = false;
+
+  @ViewChild("message", { static: false }) textAreaMessage: ElementRef;
+
   constructor(
     private firebase: FirebaseBOService,
     private details: MatDialog
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    if (Firebase.apps.length === 0) {
+      Firebase.initializeApp(environment.firebase);
+    }
+    const database = Firebase.database();
+    Firebase.auth().signInAnonymously();
+    this.initializeReading(database);
+  }
+
+  initializeReading(database) {
+    let dataRead = database.ref(
+      "tests/events/generic/" + this.event.id + "/message"
+    );
+    dataRead.on("value", async snapshot => {
+      this.isRetrievingData = true;
+      let uid = await database
+        .ref("tests/events/generic/" + this.event.id + "/uid")
+        .once("value");
+
+      if (Firebase.auth().currentUser.uid !== uid.val()) {
+        this.event.info.message = snapshot.val();
+        this.textAreaMessage.nativeElement.value = this.event.info.message;
+      }
+      setTimeout(_ => { this.isRetrievingData = false; }, 1500);
+    });
+  }
 
   length(object: object): number {
     if (object) {
@@ -54,10 +87,17 @@ export class GenericEventsCardComponent implements OnInit {
   saveMessage(message) {
     const response = this.firebase.events.generic.update.event(
       this.event.id,
-      message
+      message,
+      'message'
     );
     if (response) {
       this.communicationParticipantWithFireBase(response);
+      const uidChange = this.firebase.events.generic.update.event(
+        this.event.id,
+        Firebase.auth().currentUser.uid,
+        'uid'
+      );
+      uidChange.subscribe();
     }
   }
 

@@ -13,6 +13,11 @@ import { DateUtils } from "../../shared/localdate/date-utils";
 import { LocalDate } from "../../shared/localdate/model/localdate";
 import { Dialogs } from "../../shared/dialogs/dialogs";
 import { Event, EventInfo } from "../../shared/models/events/event/event";
+import { environment } from "../../../environments/environment";
+
+import * as Firebase from "firebase/app";
+import "firebase/database";
+import "firebase/auth";
 
 @Component({
   selector: "app-create-generic-event",
@@ -60,9 +65,13 @@ export class CreateGenericEventComponent implements OnInit {
       this.informationFormGroup
         .get("eventName")
         .setValue(this.editingGenericEvent.info.name);
-    } else {
-      console.log("No hago nada, no estoy editando.");
     }
+
+    if (Firebase.apps.length === 0) {
+      Firebase.initializeApp(environment.firebase);
+    }
+    const database = Firebase.database();
+    Firebase.auth().signInAnonymously();
   }
 
   public checkNumber(e: KeyboardEvent) {
@@ -113,7 +122,7 @@ export class CreateGenericEventComponent implements OnInit {
     const eventInfo: EventInfo = {
       name: this.informationFormGroup.get("eventName").value,
       message: this.informationFormGroup.get("message").value,
-      status: true
+      uid: Firebase.auth().currentUser.uid
     };
     const id = this.generateIdFromName(eventInfo.name);
     const event: Event = {
@@ -146,27 +155,7 @@ export class CreateGenericEventComponent implements OnInit {
           ]);
         },
         error: (err: any) => {
-          Dialogs.showError("La conexión con la base de datos ha fallado.", "");
-        }
-      });
-  }
-
-  public updateEvent() {
-    const event: EventInfo = {
-      name: this.informationFormGroup.get("eventName").value,
-      message: this.informationFormGroup.get("message").value,
-      status: true
-    };
-    this.firebaseApi.events.generic.update
-      .event(this.editingGenericEvent.id, event.message)
-      .subscribe({
-        next: (x: any) => {
-          this.router.navigate([
-            "eventos/" + x.id + "/" + this.editingGenericEvent.id
-          ]);
-        },
-        error: (err: any) => {
-          Dialogs.showError("La conexión con la base de datos ha fallado.", "");
+          Dialogs.showError("La conexión con la base de datos ha fallado.", '');
         }
       });
   }
