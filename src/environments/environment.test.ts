@@ -1,7 +1,7 @@
 export const environment = {
   production: true,
   test: false,
-  appUrlBase: "https://nogroupspam.github.io/eventosTest/",
+  appUrlBase: "https://nogroupspam.github.io/start/",
   firebaseUrls: {
     buenrollo: "https://bdbuenrollo.firebaseio.com/tests/"
   },
